@@ -1,13 +1,13 @@
 variable "region" {
-    description = "AWS Region"
-    type = string
-    default = "us-east-1"
+  description = "AWS Region"
+  type        = string
+  default     = "us-east-1"
 }
 
 variable "clusterName" {
-    description = "EKS Cluster Name"
-    type = string
-    default = "ecom-eks"
+  description = "EKS Cluster Name"
+  type        = string
+  default     = "ecom-eks"
 
 }
 
