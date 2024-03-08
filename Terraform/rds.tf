@@ -22,12 +22,12 @@ module "db" {
   create_monitoring_role = true
 
   tags = {
-    Project: "cjay-ecom"
+    Project : "cjay-ecom"
   }
 
   # DB subnet group
   db_subnet_group_name = module.vpc.database_subnet_group
-  multi_az = false
+  multi_az             = false
 
   # DB parameter group
   family = "mysql5.7"

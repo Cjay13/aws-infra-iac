@@ -15,7 +15,7 @@ variable "dbPassowrd" {
   description = "RDS password"
   type        = string
   default     = "admin123"
-  sensitive = true
+  sensitive   = true
 
 }
 
