@@ -18,3 +18,8 @@ output "cluster_security_group_id" {
   description = "Security group ID for the Amazon Web Service EKS Cluster "
   value       = module.eks.cluster_security_group_id
 }
+
+output "rds_endpoint" {
+  description = "Endpoint for RDS instance "
+  value       = module.db.db_instance_endpoint
+}
