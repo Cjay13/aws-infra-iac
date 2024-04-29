@@ -42,7 +42,7 @@ jobs:
                 severity: 'CRITICAL,HIGH'
             
             - name: Run Python script to update SARIF URIs
-              run: python update_uris.py trivy-results.sarif
+              run: python /home/runner/work/Ecom_AWS_IAC/Ecom_AWS_IAC/update_uris.py trivy-results.sarif
               
 
             - name: Upload Trivy scan results to GitHub Security tab
