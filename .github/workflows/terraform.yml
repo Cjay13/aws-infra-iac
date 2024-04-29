@@ -26,6 +26,17 @@ jobs:
               with:
                 token: ${{ secrets.REPO_TOKEN }}
 
+            - name: Run Trivy vulnerability scanner in IaC mode
+              uses: aquasecurity/trivy-action@master
+              with:
+                scan-type: 'config'
+                hide-progress: true
+                format: 'table'
+                output: 'trivy-results.html'
+                exit-code: '0'
+                ignore-unfixed: true
+                severity: 'CRITICAL,HIGH'
+
             - name: Install Terraform
               uses: hashicorp/setup-terraform@v3
 
