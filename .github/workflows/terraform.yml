@@ -36,8 +36,8 @@ jobs:
                 scan-type: 'config'
                 hide-progress: true
                 format: 'sarif'
-                output: '~/trivy-results.sarif'
-                exit-code: '0'
+                output: 'trivy-results.sarif'
+                exit-code: '1'
                 ignore-unfixed: true
                 severity: 'CRITICAL,HIGH'
 
@@ -45,7 +45,7 @@ jobs:
               uses: github/codeql-action/upload-sarif@v2
 
               with:
-                sarif_file: '~/trivy-results.sarif'
+                sarif_file: 'trivy-results.sarif'
 
             - name: Install Terraform
               uses: hashicorp/setup-terraform@v3
