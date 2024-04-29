@@ -41,8 +41,8 @@ jobs:
                 ignore-unfixed: true
                 severity: 'CRITICAL,HIGH'
             
-            # - name: debug sarif file
-            #   run: cat trivy-results.sarif
+            - name: debug sarif file
+              run: pwd
               
 
             - name: Upload Trivy scan results to GitHub Security tab
