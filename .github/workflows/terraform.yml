@@ -41,10 +41,6 @@ jobs:
                 ignore-unfixed: true
                 severity: 'CRITICAL,HIGH'
             
-            - name: debug sarif file
-              run: pwd
-              
-
             - name: Upload Trivy scan results to GitHub Security tab
               uses: github/codeql-action/upload-sarif@v3
               with:
