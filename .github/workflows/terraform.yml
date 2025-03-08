@@ -55,7 +55,7 @@ jobs:
                 terraform init \
                   -backend-config="bucket=$TF_STATE_BUCKET" \
                   -backend-config="dynamodb_table=terraform-state-lock" \
-                  -backend-config="key=/ecom-state/terraform.tfstate"
+                  -backend-config="key=ecom-state/terraform.tfstate"
 
 
             - name: Terraform fmt
