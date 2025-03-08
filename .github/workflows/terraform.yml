@@ -46,8 +46,8 @@ jobs:
             #   with:
             #     sarif_file: 'trivy-results.sarif'
 
-            # - name: Install Terraform
-            #   uses: hashicorp/setup-terraform@v3
+            - name: Install Terraform
+              uses: hashicorp/setup-terraform@v3
 
             - name: Terraform init
               id: init
