@@ -12,8 +12,8 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "cj-vprofile-s3-storage"
+    bucket = "cjay-ecom-tf-status"
     key    = "terraform.ecom-tfstate"
-    region = "us-east-1"
+    region = "ap-southeast-2"
   }
 }
