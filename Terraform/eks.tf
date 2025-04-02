@@ -11,8 +11,8 @@ module "eks" {
   subnet_ids = module.vpc.private_subnets
 
   cluster_addons = {
-    aws-ebs-csi-driver = { 
-      most_recent = true 
+    aws-ebs-csi-driver = {
+      most_recent = true
     }
   }
 
