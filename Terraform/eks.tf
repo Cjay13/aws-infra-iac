@@ -10,6 +10,12 @@ module "eks" {
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
 
+  cluster_addons = {
+    aws-ebs-csi-driver = {
+      most_recent = true
+    }
+  }
+
   # EKS Managed Node Group(s)
   eks_managed_node_groups = {
     one = {
@@ -20,6 +26,10 @@ module "eks" {
       max_size     = 3
       desired_size = 2
 
+      iam_role_additional_policies = {
+        AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+      }
+
     }
 
     two = {
@@ -29,6 +39,10 @@ module "eks" {
       min_size     = 1
       max_size     = 2
       desired_size = 1
+
+      iam_role_additional_policies = {
+        AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+      }
 
     }
   }
