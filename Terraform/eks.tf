@@ -28,6 +28,12 @@ module "eks" {
 
       iam_role_additional_policies = {
         AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+        ClusterAutoscalerPolicy = "arn:aws:iam::266735819216:policy/cluster-asg"
+      }
+
+      tags = {
+        "k8s.io/cluster-autoscaler/enabled"         = "true"
+        "k8s.io/cluster-autoscaler/ecom-eks" = "owned"
       }
 
     }
@@ -42,6 +48,12 @@ module "eks" {
 
       iam_role_additional_policies = {
         AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+        ClusterAutoscalerPolicy = "arn:aws:iam::266735819216:policy/cluster-asg"
+      }
+
+      tags = {
+        "k8s.io/cluster-autoscaler/enabled"         = "true"
+        "k8s.io/cluster-autoscaler/ecom-eks" = "owned"
       }
 
     }
