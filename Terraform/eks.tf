@@ -22,9 +22,9 @@ module "eks" {
       name           = "node-group-1"
       instance_types = ["t3.small"]
 
-      min_size     = 1
-      max_size     = 3
-      desired_size = 2
+      min_size     = 2
+      max_size     = 4
+      desired_size = 3
 
       iam_role_additional_policies = {
         AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
