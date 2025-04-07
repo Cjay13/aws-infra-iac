@@ -21,6 +21,8 @@ module "db" {
   monitoring_role_name   = "MyRDSMonitoringRole"
   create_monitoring_role = true
 
+  deletion_protection = true
+
   tags = {
     Project : "cjay-ecom"
   }
@@ -34,10 +36,6 @@ module "db" {
 
   # DB option group
   major_engine_version = "5.7"
-
-
-  # Database Deletion Protection
-  deletion_protection = false
 
   parameters = [
     {
