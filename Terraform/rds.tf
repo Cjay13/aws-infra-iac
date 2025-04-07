@@ -21,6 +21,8 @@ module "db" {
   monitoring_role_name   = "MyRDSMonitoringRole"
   create_monitoring_role = true
 
+  deletion_protection = true
+
   tags = {
     Project : "cjay-ecom"
   }
