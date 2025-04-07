@@ -72,6 +72,34 @@ jobs:
               id: validate
               run: terraform validate
 
+            - name: Run Trivy IaC scan
+              uses: aquasecurity/trivy-action@master
+              with:
+                scan-type: 'config'
+                hide-progress: true
+                format: 'sarif'
+                output: 'trivy-results.sarif'
+                exit-code: '0'
+                ignore-unfixed: true
+                severity: 'CRITICAL,HIGH'
+
+            - name: Upload Trivy scan results to GitHub Security tab
+              uses: github/codeql-action/upload-sarif@v3
+              with:
+                sarif_file: 'trivy-results.sarif'
+
+            - name: Run tfsec scan
+              uses: aquasecurity/tfsec-sarif-action@v1
+              with:
+                working-directory: ./Terraform
+                sarif_file: tfsec-results.sarif
+            
+            - name: Upload tfsec scan results to GitHub Security tab
+              uses: github/codeql-action/upload-sarif@v3
+              with:
+                sarif_file: tfsec-results.sarif
+
+
             - name: Terraform plan
               id: plan
               run: terraform plan -no-color -input=false -out planfile
