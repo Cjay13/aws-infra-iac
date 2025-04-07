@@ -30,6 +30,13 @@ jobs:
               with:
                 token: ${{ secrets.REPO_TOKEN }}
 
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                aws-region: ${{ env.AWS_REGION }}
+                aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+                aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+
             # - name: Run Trivy vulnerability scanner in IaC mode
             #   uses: aquasecurity/trivy-action@master
             #   with:
@@ -57,7 +64,6 @@ jobs:
                   -backend-config="dynamodb_table=terraform-state-lock" \
                   -backend-config="key=ecom-state/terraform.tfstate"
 
-
            # - name: Terraform fmt
           #    id: fmt
             #  run: terraform fmt -check
@@ -80,21 +86,14 @@ jobs:
               if: github.ref == 'refs/heads/main' && github.event_name == 'push'
               run: terraform apply -auto-approve -input=false -parallelism=1 planfile
 
-            - name: Configure AWS credentials
-              uses: aws-actions/configure-aws-credentials@v4
-              with:
-                aws-region: ${{ env.AWS_REGION }}
-                aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-                aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-
             - name: Get kubeconfig file
               id: kubeconfig
-              if: steps.apply.outcome == 'success'
+              if: github.ref == 'refs/heads/main' && steps.apply.outcome == 'success'
               run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}
 
             - name: Install ingress controller
               id: ingress
-              if: steps.apply.outcome == 'success' && steps.kubeconfig.outcome == 'success'
+              if: github.ref == 'refs/heads/main' && steps.kubeconfig.outcome == 'success'
               run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/aws/deploy.yaml
 
             # - name: Terraform destroy
