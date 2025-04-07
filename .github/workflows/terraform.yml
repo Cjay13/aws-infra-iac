@@ -13,7 +13,7 @@ env:
     EKS_CLUSTER: ecom-eks
 jobs:
     terraform:
-        name: "Apply Terraform Changes"
+        name: "Terraform plan"
         runs-on: ubuntu-latest
         permissions:
           actions: read
