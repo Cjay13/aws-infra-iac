@@ -1,8 +1,9 @@
-name: "Terraform-Plan"
+name: "Terraform-Plan-Apply"
 on:
     push:
         branches:
             - stage
+            - main
         paths:
             - Terraform/**
 env:
@@ -37,6 +38,7 @@ jobs:
                 aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
 
             - name: Run Trivy IaC scan
+              if: github.ref == 'refs/heads/stage'
               uses: aquasecurity/trivy-action@master
               with:
                 scan-type: 'config'
@@ -48,6 +50,7 @@ jobs:
                 severity: 'CRITICAL,HIGH'
 
             - name: Upload Trivy scan results to GitHub Security tab
+              if: github.ref == 'refs/heads/stage'
               uses: github/codeql-action/upload-sarif@v3
               with:
                 sarif_file: 'trivy-results.sarif'
@@ -69,6 +72,7 @@ jobs:
 
             - name: Terraform validate
               id: validate
+              if: github.ref == 'refs/heads/stage'
               run: terraform validate
 
 
@@ -87,30 +91,31 @@ jobs:
 
             - name: Terraform plan
               id: plan
+              if: github.ref == 'refs/heads/stage'
               run: terraform plan -no-color -input=false -out planfile
               continue-on-error: true
 
             - name: Upload Terraform plan file
-              if: github.ref == 'refs/heads/stage' || github.ref == 'refs/heads/main'
+              if: github.ref == 'refs/heads/stage'
               uses: actions/upload-artifact@v4
               with:
                 name: terraform-plan
                 path: ./Terraform/planfile
 
-            # - name: Terraform apply
-            #   id: apply
-            #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-            #   run: terraform apply -auto-approve -input=false -parallelism=1 planfile
+            - name: Terraform apply
+              id: apply
+              if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+              run: terraform apply -auto-approve -input=false -parallelism=1 planfile
 
-            # - name: Get kubeconfig file
-            #   id: kubeconfig
-            #   if: github.ref == 'refs/heads/main' && steps.apply.outcome == 'success'
-            #   run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}
+            - name: Get kubeconfig file
+              id: kubeconfig
+              if: github.ref == 'refs/heads/main' && steps.apply.outcome == 'success'
+              run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}
 
-            # - name: Install ingress controller
-            #   id: ingress
-            #   if: github.ref == 'refs/heads/main' && steps.kubeconfig.outcome == 'success'
-            #   run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/aws/deploy.yaml
+            - name: Install ingress controller
+              id: ingress
+              if: github.ref == 'refs/heads/main' && steps.kubeconfig.outcome == 'success'
+              run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/aws/deploy.yaml
 
             # - name: Terraform destroy
             #   id: destroy
