@@ -24,6 +24,8 @@ module "vpc" {
     "kubernetes.io/role/elb" = 1
   }
 
+  enable_flow_log = true
+
 }
 
 module "rds_sg" {
