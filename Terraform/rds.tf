@@ -37,10 +37,6 @@ module "db" {
   # DB option group
   major_engine_version = "5.7"
 
-
-  # Database Deletion Protection
-  deletion_protection = false
-
   parameters = [
     {
       name  = "character_set_client"
