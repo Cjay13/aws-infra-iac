@@ -49,7 +49,11 @@ jobs:
 
             - name: List artifacts in the workspace
               run: |
-                ls -la ./Terraform
+                ls -la
+
+            - name: List artifacts in the workspace
+              run: |
+                pwd
 
             - name: Download Plan File
               uses: actions/download-artifact@v4
