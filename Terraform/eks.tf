@@ -10,6 +10,8 @@ module "eks" {
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
 
+  cluster_enabled_log_types = ["api", "authenticator", "audit", "scheduler", "controllerManager"]
+
   cluster_addons = {
     aws-ebs-csi-driver = {
       most_recent = true
