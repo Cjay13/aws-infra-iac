@@ -47,6 +47,10 @@ jobs:
                   -backend-config="dynamodb_table=terraform-state-lock" \
                   -backend-config="key=ecom-state/terraform.tfstate"
 
+            - name: List artifacts in the workspace
+              run: |
+                ls -la ./Terraform
+
             - name: Download Plan File
               uses: actions/download-artifact@v4
               with:
