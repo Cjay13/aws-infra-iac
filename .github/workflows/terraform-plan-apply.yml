@@ -102,9 +102,17 @@ jobs:
                 name: terraform-plan
                 path: ./Terraform/planfile
 
+            - name: Download Plan File
+              id: download_plan
+              if: github.ref == 'refs/heads/main'
+              uses: actions/download-artifact@v4
+              with:
+                name: terraform-plan
+                path: ./Terraform
+
             - name: Terraform apply
               id: apply
-              if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+              if: github.ref == 'refs/heads/main' && step.download_plan.outcome == 'success'
               run: terraform apply -auto-approve -input=false -parallelism=1 planfile
 
             - name: Get kubeconfig file
