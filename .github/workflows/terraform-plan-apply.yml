@@ -86,7 +86,7 @@ jobs:
       - name: Terraform apply
         id: apply
         if: github.ref == 'refs/heads/main' && steps.plan.outcome == 'success'
-        run: terraform apply -auto-approve -input=false -parallelism=1 planfile
+        run: terraform apply -auto-approve -input=false -parallelism=1 planfile-${{ github.sha }}
 
       - name: Get kubeconfig file
         id: kubeconfig
