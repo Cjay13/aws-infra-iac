@@ -85,7 +85,7 @@ jobs:
 
       - name: Terraform apply
         id: apply
-        if: github.ref == 'refs/heads/main' and steps.plan.outcome == 'success'
+        if: github.ref == 'refs/heads/main' && steps.plan.outcome == 'success'
         run: terraform apply -auto-approve -input=false -parallelism=1 planfile
 
       - name: Get kubeconfig file
