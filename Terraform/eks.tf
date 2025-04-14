@@ -23,6 +23,7 @@ module "eks" {
     one = {
       name           = "node-group-1"
       instance_types = ["t3.small"]
+      capacity_type = "SPOT"
 
       min_size     = 2
       max_size     = 4
@@ -40,25 +41,6 @@ module "eks" {
 
     }
 
-    two = {
-      name           = "node-group-2"
-      instance_types = ["t3.small"]
-
-      min_size     = 1
-      max_size     = 2
-      desired_size = 1
-
-      iam_role_additional_policies = {
-        AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
-        ClusterAutoscalerPolicy = "arn:aws:iam::266735819216:policy/cluster-asg"
-      }
-
-      tags = {
-        "k8s.io/cluster-autoscaler/enabled"         = "true"
-        "k8s.io/cluster-autoscaler/ecom-eks" = "owned"
-      }
-
-    }
   }
 
   # Cluster access entry
