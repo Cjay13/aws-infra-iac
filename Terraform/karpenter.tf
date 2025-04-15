@@ -79,13 +79,13 @@ resource "kubectl_manifest" "karpenter_node_class" {
     spec:
      role: ${module.karpenter.node_iam_role_name}
      amiFamily: AL2
-      subnetSelectorTerms:
+     subnetSelectorTerms:
         - tags:
             karpenter.sh/discovery: ${module.eks.cluster_name}
-      securityGroupSelectorTerms:
+     securityGroupSelectorTerms:
         - tags:
             karpenter.sh/discovery: ${module.eks.cluster_name}
-      tags:
+     tags:
         karpenter.sh/discovery: ${module.eks.cluster_name}
   YAML
 
