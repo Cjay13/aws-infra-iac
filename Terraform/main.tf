@@ -1,12 +1,68 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+
+    helm = {
+      source = "hashicorp/helm"
+      version = "~> 2.17.0"
+    }
+
+    kubectl = {
+      source = "gavinbunney/kubectl"
+      version = "1.19.0"
+    }
+
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.27.0"
+    }
+    
+  }
+
+  backend "s3" {
+    bucket = "cjay-tf-status"
+    key    = "terraform.netflix-tfstate"
+    region = "ap-southeast-2"
+  }
+}
+
+
+provider "helm" {
+  kubernetes {
+    host                   = module.eks.cluster_endpoint
+    cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+
+    exec {
+      api_version = "client.authentication.k8s.io/v1beta1"
+      command     = "aws"
+      # This requires the awscli to be installed locally where Terraform is executed
+      args = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
+    }
+  }
+}
+
+provider "kubectl" {
+  apply_retry_count = 3
+  host = module.eks.cluster_endpoint
+  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+  load_config_file = false
+  exec {
+   api_version = "client.authentication.k8s.io/v1beta1"
+    args        = ["eks", "get-token", "--cluster-name", var.clusterName]
+    command     = "aws"
+  }   
+}
+
 provider "kubernetes" {
   host                   = module.eks.cluster_endpoint
   cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+  
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    command     = "aws"
+    args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
+  }
 }
-
-provider "aws" {
-  region = var.region
-}
-
-data "aws_availability_zones" "available" {}
-
-##Test28
