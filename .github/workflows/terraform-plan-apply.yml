@@ -62,7 +62,7 @@ jobs:
         run: |
           echo "Bucket: ${TF_STATE_BUCKET}"
           echo "Key: ${TF_STATE_KEY}"
-          echo "Lock DB: ${TF_LOCK_DYNAMODB}"
+          echo "Lock DB: ${TF_STATE_LOCK_DB}"
 
       - name: Terraform init
         id: init
@@ -79,6 +79,10 @@ jobs:
       - name: Terraform plan
         id: plan
         run: terraform plan -no-color -input=false -out planfile-${{ github.sha }}
+
+      - name: debug planfile
+        run: |
+          ls -la .Terraform/planfile-${{ github.sha }}
 
       - name: Store Plan in S3
         uses: cloudposse/github-action-terraform-plan-storage@v1
