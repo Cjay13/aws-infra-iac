@@ -11,7 +11,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
   TF_STATE_BUCKET: ${{ secrets.TF_STATE_BUCKET }}
   TF_STATE_KEY: ${{ secrets.TF_STATE_KEY }}
-  TF_STATE_LOCK_DB: ${{ secrets.TF_LOCK_DYNAMODB }}
+  TF_STATE_LOCK_DB: ${{ secrets.TF_STATE_LOCK_DB }}
   TF_PLAN_METADATA_DB: ${{ secrets.TF_PLAN_METADATA_DB }}
   AWS_REGION: ap-southeast-2
   
