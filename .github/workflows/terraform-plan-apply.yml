@@ -82,7 +82,7 @@ jobs:
 
       - name: debug planfile
         run: |
-          ls -la .Terraform/planfile-${{ github.sha }}
+          ls -la ./Terraform/planfile-${{ github.sha }}
 
       - name: Store Plan in S3
         uses: cloudposse/github-action-terraform-plan-storage@v1
