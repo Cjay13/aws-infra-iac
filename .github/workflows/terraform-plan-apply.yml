@@ -92,8 +92,8 @@ jobs:
           planPath: ./Terraform/planfile-${{ github.sha }}
           component: backend-infra-plans
           stack: user-management
-          tableName: $TF_PLAN_METADATA_DB
-          bucketName: $TF_STATE_BUCKET
+          tableName: ${{ env.TF_PLAN_METADATA_DB }}
+          bucketName: ${{ env.TF_STATE_BUCKET }}
 
 
       # - name: Upload Terraform plan file
