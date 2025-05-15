@@ -89,7 +89,7 @@ jobs:
         id: store-plan
         with:
           action: storePlan
-          planPath: planfile-${{ github.sha }}
+          planPath: ./Terraform/planfile-${{ github.sha }}
           component: backend-infra-plans
           stack: user-management
           tableName: $TF_PLAN_METADATA_DB
