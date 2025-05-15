@@ -68,9 +68,9 @@ jobs:
         id: init
         run: |
           terraform init \
-            -backend-config="bucket=$TF_STATE_BUCKET" \
+            -backend-config="bucket=cjay-tf-status" \
             -backend-config="dynamodb_table=$TF_STATE_LOCK_DB" \
-            -backend-config="key=$TF_STATE_KEY"
+            -backend-config="key=user-management/backend-infra/terraform.tfstate"
 
       - name: Terraform validate
         id: validate
