@@ -21,11 +21,7 @@ terraform {
     }
   }
 
-  #backend "s3" {
-  #  bucket = "cjay-ecom-tf-status"
-  #  key    = "terraform.ecom-tfstate"
-  #  region = "ap-southeast-2"
-  #}
+  backend "s3" {}
 }
 
 data "aws_availability_zones" "available" {
