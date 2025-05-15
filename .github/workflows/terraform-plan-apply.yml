@@ -58,6 +58,12 @@ jobs:
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
 
+      - name: Debug env
+        run: |
+          echo "Bucket: ${TF_STATE_BUCKET}"
+          echo "Key: ${TF_STATE_KEY}"
+          echo "Lock DB: ${TF_LOCK_DYNAMODB}"
+
       - name: Terraform init
         id: init
         run: |
