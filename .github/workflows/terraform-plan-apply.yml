@@ -90,8 +90,8 @@ jobs:
         with:
           action: storePlan
           planPath: ./Terraform/planfile-${{ github.sha }}
-          component: backend-infra-plans
-          stack: user-management
+          component: user-management
+          stack: backend-infra
           tableName: ${{ env.TF_PLAN_METADATA_DB }}
           bucketName: ${{ env.TF_STATE_BUCKET }}
 
