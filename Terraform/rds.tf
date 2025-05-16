@@ -11,7 +11,6 @@ module "db" {
   db_name  = "ecomdb"
   username = "cjay"
   port     = "3306"
-  password = var.dbPassowrd
 
   vpc_security_group_ids = [module.rds_sg.security_group_id]
 
