@@ -163,7 +163,7 @@ jobs:
 
       - name: Terraform apply
         id: apply
-        run: terraform apply -auto-approve -input=false -parallelism=1 planfile-${{ github.sha }}
+        run: terraform apply -auto-approve -input=false -parallelism=1 planfile-${{ github.event.inputs.sha }}
 
       
 
