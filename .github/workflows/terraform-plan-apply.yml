@@ -142,7 +142,7 @@ jobs:
         id: get-plan
         with:
           action: getPlan
-          planPath: ./Terraform/planfile-${{ github.sha }}
+          planPath: ./Terraform/planfile-${{ github.event.inputs.sha }}
           component: ${{ env.COMPONENT }}
           stack: ${{ env.STACK }}
           tableName: ${{ env.TF_PLAN_METADATA_DB }}
