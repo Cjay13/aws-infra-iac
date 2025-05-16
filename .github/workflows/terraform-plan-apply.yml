@@ -3,9 +3,14 @@ on:
   push:
     branches:
       - stage
-      - main
     paths:
       - Terraform/**
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: "Commit SHA to apply"
+        required: true
+
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
@@ -14,6 +19,8 @@ env:
   TF_STATE_LOCK_DB: ${{ secrets.TF_STATE_LOCK_DB }}
   TF_PLAN_METADATA_DB: ${{ secrets.TF_PLAN_METADATA_DB }}
   AWS_REGION: ap-southeast-2
+  COMPONENT: user-management
+  STACK: backend-infra
   
 jobs:
   terraform-plan:
@@ -90,10 +97,73 @@ jobs:
         with:
           action: storePlan
           planPath: ./Terraform/planfile-${{ github.sha }}
-          component: user-management
-          stack: backend-infra
+          component: ${{ env.COMPONENT }}
+          stack: ${{ env.STACK }}
           tableName: ${{ env.TF_PLAN_METADATA_DB }}
           bucketName: ${{ env.TF_STATE_BUCKET }}
+
+  terraform-apply:
+    if: github.event_name == 'workflow_dispatch'
+    name: "Terraform Apply"
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./Terraform
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform init
+        id: init
+        run: |
+          terraform init \
+            -backend-config="bucket=$TF_STATE_BUCKET" \
+            -backend-config="dynamodb_table=$TF_STATE_LOCK_DB" \
+            -backend-config="key=$TF_STATE_KEY"
+
+      - name: Get planfile from S3
+        uses: cloudposse/github-action-terraform-plan-storage@v1
+        id: get-plan
+        with:
+          action: getPlan
+          planPath: ./Terraform/planfile-${{ github.sha }}
+          component: ${{ env.COMPONENT }}
+          stack: ${{ env.STACK }}
+          tableName: ${{ env.TF_PLAN_METADATA_DB }}
+          bucketName: ${{ env.TF_STATE_BUCKET }}
+
+      - name: Fetch main branches
+        run: git fetch origin main
+
+      - name: Validate input SHA is in main
+        run: |
+          if ! git merge-base --is-ancestor ${{ github.event.inputs.sha }} origin/main; then
+            echo "Commit is not in main"
+            exit 1
+          fi
+
+      - name: Terraform apply
+        id: apply
+        run: terraform apply -auto-approve -input=false -parallelism=1 planfile-${{ github.sha }}
+
+      
+
 
 
       # - name: Upload Terraform plan file
